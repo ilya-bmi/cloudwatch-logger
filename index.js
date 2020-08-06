@@ -6,7 +6,7 @@
 const getCloudWatchLogs = require('./cloudwatch-logs.js');
 const _logbuffer = new WeakMap()
 const DeviceInfo = require("react-native-device-info");
-let loggerInstance;
+let cloudwatchLog;
 const delayFn = (fn, time) => makeQuerablePromise((new Promise((onSuccess) => setTimeout(() => onSuccess(), time))).then(() => fn()))
 const makeQuerablePromise = promise => {
   // Don't modify any promise that has been already modified.
@@ -146,8 +146,12 @@ class Logger {
     return this.CloudWatchLogs;
   }
 };
+const getLoger = () => {
+  return cloudwatchLog
 
-export const initLogger = (config) => {
-  loggerInstance = new Logger(config);
 }
-module.exports = loggerInstance;
+const initLogger = (config) => {
+  cloudwatchLog = new Logger(config);
+  return cloudwatchLog;
+}
+module.exports = { getLoger, initLogger }
