@@ -1,7 +1,7 @@
 {
   "name": "cloudwatch-logger",
-  "version": "0.2.0",
-  "description": "Asynchronous logs from node.js to AWS CloudWatch",
+  "version": "0.3.0",
+  "description": "Asynchronous logs from RN to AWS CloudWatch",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

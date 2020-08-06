@@ -2,9 +2,11 @@
  * CLOUDWATCH LOGGER
  * =============
  */
+
 const getCloudWatchLogs = require('./cloudwatch-logs.js');
 const _logbuffer = new WeakMap()
-const DeviceInfo =  require("react-native-device-info");
+const DeviceInfo = require("react-native-device-info");
+let loggerInstance;
 const delayFn = (fn, time) => makeQuerablePromise((new Promise((onSuccess) => setTimeout(() => onSuccess(), time))).then(() => fn()))
 const makeQuerablePromise = promise => {
   // Don't modify any promise that has been already modified.
@@ -34,13 +36,14 @@ const makeQuerablePromise = promise => {
   result.isRejected = () => isRejected
   return result
 }
+
 class Logger {
   constructor(config) {
     const uniqueId = DeviceInfo.getUniqueId();
     const now = new Date();
     this.CloudWatchLogs = getCloudWatchLogs(config);
     this.logGroupName = config.logGroupName;
-    this.logStreamName = `${config.logStreamName}-${uniqueId}-${now.toISOString().replace(/:/g,"-")}`;
+    this.logStreamName = `${config.logStreamName}-${uniqueId}-${now.toISOString().replace(/:/g, "-")}`;
     this.sequenceToken = null;
     this.isConnected = false;
     this.uploadFreq = config?.uploadFreq || null;
@@ -81,7 +84,7 @@ class Logger {
           timestamp: Date.now()
         }
       });
-     
+
       // console.log('Logging now...')
       // console.log(logs)
       this.sendLog(logEvents);
@@ -116,7 +119,7 @@ class Logger {
 
   // sends JSON-encoded arguments as individual log events to the CW log
   async sendLog(logEvents) {
-  
+
 
     const streamParams = {
       logEvents,
@@ -144,4 +147,7 @@ class Logger {
   }
 };
 
-module.exports = Logger;
+export const initLogger = (config) => {
+  loggerInstance = new Logger(config);
+}
+module.exports = loggerInstance;
