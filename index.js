@@ -43,7 +43,7 @@ class Logger {
     const now = new Date();
     this.CloudWatchLogs = getCloudWatchLogs(config);
     this.logGroupName = config.logGroupName;
-    this.logStreamName = `${config.logStreamName}-${uniqueId}-${now.toISOString().replace(/:/g, "-")}`;
+    this.logStreamName = config.customLogStreamName ? config.customLogStreamName : `${config.logStreamName}-${uniqueId}-${now.toISOString().replace(/:/g, "-")}`;
     this.sequenceToken = null;
     this.isConnected = false;
     this.uploadFreq = config?.uploadFreq || null;
